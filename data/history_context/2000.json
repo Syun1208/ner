@@ -1,0 +1,150 @@
+[
+    {
+        "role": "user",
+        "content": "\n                    Now, User want to do an action. You are a chatbot that helps users perform basic tasks like getting performance report.                     Based on the user's command, extract the necessary                     information to meet the user's request.\n                    If any information is unclear, ask for clarification instead of filling in the information yourself.                     Ask the user if the information is correct before performing the function.\n                 "
+    },
+    {
+        "role": "user",
+        "content": "Hello bot, how are you today ?"
+    },
+    {
+        "role": "assistant",
+        "content": "Hello! I'm doing great, thank you for asking. How can I assist you today? If you're looking to generate a performance report or need help with anything else, just let me know!"
+    },
+    {
+        "role": "user",
+        "content": "I want to get Winlost Report please"
+    },
+    {
+        "role": "assistant",
+        "content": "Sure thing! To proceed, I'll need some specific details from you:\n\n1. The start date (`from_date`) for the report (format: YYYY-MM-DD).\n2. The end date (`to_date`) for the report (format: YYYY-MM-DD).\n3. Optionally, specify a user level (e.g., Super Agent), product type (e.g., Sportsbook), and/or specific product detail if you want to filter the report further.\n4. If applicable, provide a username.\n\nCould you please provide me with this information?"
+    },
+    {
+        "role": "user",
+        "content": "Get me a Win Loss Detail Report on day 10"
+    },
+    {
+        "role": "assistant",
+        "content": "To generate the win/loss detail report, I need more precise details such as the start date and end date in YYYY-MM-DD format. Since you mentioned \"day 10,\" could you please specify which month and year this refers to?\n\nAdditionally, if you want to filter the report by user level, product type, or specific product detail, please let me know those specifics as well.\n\nCould you provide these details?"
+    },
+    {
+        "role": "user",
+        "content": "Get me a Win Loss Detail Report on day March 24th, 2025"
+    },
+    {
+        "role": "assistant",
+        "content": "Sure! To generate the win/loss detail report for March 24th, 2025, I need to know both the start date and end date. Since you mentioned only one specific day, would you like the report to cover just that single day (from midnight of March 24, 2025 to midnight of March 24, 2025) or a range around it?\n\nAlso, do you need any filters applied such as user level, product type, or specific product detail? If not specified, the report will include all data for that date.\n\nPlease confirm these details so I can proceed with generating your report."
+    },
+    {
+        "role": "user",
+        "content": "Yes"
+    },
+    {
+        "role": "assistant",
+        "content": "To clarify, would you like the win/loss detail report to cover just March 24th, 2025? If yes, please confirm this is the exact period you need. Also, do you want to apply any filters such as user level, product type, or specific product detail?\n\nIf everything looks correct with these details, I'll proceed with generating your report for March 24th, 2025.\n\n- Start Date: 2025-03-24\n- End Date: 2025-03-24\n\nDo you need any additional filters applied?"
+    },
+    {
+        "role": "user",
+        "content": "Confirmed"
+    },
+    {
+        "role": "assistant",
+        "content": null
+    },
+    {
+        "role": "user",
+        "content": "I want SportsBook only"
+    },
+    {
+        "role": "assistant",
+        "content": "Got it! Here are the details we have:\n\n- Start Date: 2025-03-24\n- End Date: 2025-03-24\n- Product Type: Sportsbook\n\nWould you like to add any other filters or is this information correct? If everything looks good, I will generate the win/loss detail report for you."
+    },
+    {
+        "role": "user",
+        "content": "Good"
+    },
+    {
+        "role": "assistant",
+        "content": null
+    },
+    {
+        "role": "user",
+        "content": "Currently, the SFB almost attacks the system and has an adverse impact on the profit of company, I want to get more winlost detail from 1/1 to 31/1"
+    },
+    {
+        "role": "assistant",
+        "content": "To clarify, you would like a detailed win/loss report for January covering all days from January 1st to January 31st, 2025, and specifically filtering by the product type \"Sportsbook.\" Is that correct?\n\nHere are the details:\n- Start Date: 2025-01-01\n- End Date: 2025-01-31\n- Product Type: Sportsbook\n\nPlease confirm if this information is accurate and we can proceed with generating the report."
+    },
+    {
+        "role": "user",
+        "content": "That's right. You are so smart!"
+    },
+    {
+        "role": "assistant",
+        "content": null
+    },
+    {
+        "role": "user",
+        "content": "I want to get the information of product Virtual Sports and product detail SABA Soccer"
+    },
+    {
+        "role": "assistant",
+        "content": null
+    },
+    {
+        "role": "user",
+        "content": "I want to get the information of product Virtual Sports and product detail SABA Soccer"
+    },
+    {
+        "role": "assistant",
+        "content": "Got it! Here are the details for your win/loss report:\n\n- Start Date: 2025-01-01\n- End Date: 2025-01-31\n- Product Type: Virtual Sports\n- Specific Product Detail: SABA Soccer\n\nPlease confirm if this information is correct and we can proceed with generating the report."
+    },
+    {
+        "role": "user",
+        "content": "You're right!"
+    },
+    {
+        "role": "assistant",
+        "content": null
+    },
+    {
+        "role": "user",
+        "content": "I need to relax a little bit"
+    },
+    {
+        "role": "assistant",
+        "content": "Sure thing! If you need any further assistance or have more questions later, feel free to ask. Enjoy your relaxation time!\n\nIf you decide you want to proceed with generating the report or if there's anything else you need help with, just let me know!"
+    },
+    {
+        "role": "user",
+        "content": "I want to get the information of product RNG"
+    },
+    {
+        "role": "assistant",
+        "content": "Got it! You would like a win/loss detail report for January 2025 (from January 1st to January 31st) filtered by the product type \"RNG.\" Is that correct?\n\nHere are the details:\n- Start Date: 2025-01-01\n- End Date: 2025-01-31\n- Product Type: RNG\n\nPlease confirm if this information is accurate and we can proceed with generating the report."
+    },
+    {
+        "role": "user",
+        "content": "I confirmed it"
+    },
+    {
+        "role": "assistant",
+        "content": null
+    },
+    {
+        "role": "user",
+        "content": "Oke thatâ€™s enough, thank you"
+    },
+    {
+        "role": "assistant",
+        "content": null
+    },
+    {
+        "role": "user",
+        "content": "Oke that’s enough, thank you"
+    },
+    {
+        "role": "assistant",
+        "content": "You're welcome! If you need any further assistance in the future, feel free to ask. Have a great day!\n\nIf there's anything else or if you change your mind about generating more reports later, just let me know. Take care!"
+    }
+]
