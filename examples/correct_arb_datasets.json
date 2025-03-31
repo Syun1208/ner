@@ -1,0 +1,515 @@
+[
+    {
+        "query": "Can you generate a Win/Loss report for ABCTeam, specifically for the user ABCTeam2345, who is an active member within the Sportsbook Product with details during the period from 10/05/2023 to 15/06/2023?",
+        "entities": [
+            {
+                "entity": "ABCTeam",
+                "from_index": 39,
+                "to_index": 46,
+                "label": "user"
+            },
+            {
+                "entity": "Sportsbook Product",
+                "from_index": 122,
+                "to_index": 140,
+                "label": "product_detail"
+            },
+            {
+                "entity": "10/05/2023 to 15/06/2023",
+                "from_index": 177,
+                "to_index": 201,
+                "label": "date_range"
+            },
+            {
+                "entity": "ABCTeam2345",
+                "from_index": 74,
+                "to_index": 85,
+                "label": "user"
+            }
+        ]
+    },
+    {
+        "query": "I need a Win/Loss report for the user ABCTeam2345 in the Sportsbook Product covering activities from February to April 2023.",
+        "entities": [
+            {
+                "entity": "ABCTeam2345",
+                "from_index": 38,
+                "to_index": 49,
+                "label": "user"
+            },
+            {
+                "entity": "Sportsbook Product",
+                "from_index": 57,
+                "to_index": 75,
+                "label": "product_detail"
+            },
+            {
+                "entity": "February to April 2023",
+                "from_index": 101,
+                "to_index": 123,
+                "label": "date_range"
+            }
+        ]
+    },
+    {
+        "query": "Please provide a Win/Loss report for the user ABCTeam in the Sportsbook Product with details between the dates of March 20 and April 30, 2023.",
+        "entities": [
+            {
+                "entity": "ABCTeam",
+                "from_index": 46,
+                "to_index": 53,
+                "label": "user"
+            },
+            {
+                "entity": "Sportsbook Product",
+                "from_index": 61,
+                "to_index": 79,
+                "label": "product_detail"
+            },
+            {
+                "entity": "March 20 and April 30, 2023",
+                "from_index": 114,
+                "to_index": 141,
+                "label": "date_range"
+            }
+        ]
+    },
+    {
+        "query": "Could you provide a detailed Win/Loss report for AB2C3D4E5, who is an active member under the Sportsbook product with details of transactions during January?",
+        "entities": [
+            {
+                "entity": "AB2C3D4E5",
+                "from_index": 49,
+                "to_index": 58,
+                "label": "user"
+            },
+            {
+                "entity": "Sportsbook",
+                "from_index": 94,
+                "to_index": 104,
+                "label": "product_detail"
+            },
+            {
+                "entity": "January",
+                "from_index": 149,
+                "to_index": 156,
+                "label": "date_range"
+            }
+        ]
+    },
+    {
+        "query": "Please generate a report for user AB2C3D4E5 indicating their activity in the Sportsbook product during February.",
+        "entities": [
+            {
+                "entity": "AB2C3D4E5",
+                "from_index": 34,
+                "to_index": 43,
+                "label": "user"
+            },
+            {
+                "entity": "Sportsbook",
+                "from_index": 77,
+                "to_index": 87,
+                "label": "product_detail"
+            },
+            {
+                "entity": "February",
+                "from_index": 103,
+                "to_index": 111,
+                "label": "date_range"
+            }
+        ]
+    },
+    {
+        "query": "I need a Win/Loss report for the user AB2C3D4E5 focusing on their transactions in the Sportsbook product during March.",
+        "entities": [
+            {
+                "entity": "AB2C3D4E5",
+                "from_index": 38,
+                "to_index": 47,
+                "label": "user"
+            },
+            {
+                "entity": "Sportsbook",
+                "from_index": 86,
+                "to_index": 96,
+                "label": "product_detail"
+            },
+            {
+                "entity": "March",
+                "from_index": 112,
+                "to_index": 117,
+                "label": "date_range"
+            }
+        ]
+    },
+    {
+        "query": "Can you prepare a detailed Win/Loss report for AB2C3D4E5 highlighting their activities in the Sportsbook product during April?",
+        "entities": [
+            {
+                "entity": "AB2C3D4E5",
+                "from_index": 47,
+                "to_index": 56,
+                "label": "user"
+            },
+            {
+                "entity": "Sportsbook",
+                "from_index": 94,
+                "to_index": 104,
+                "label": "product_detail"
+            },
+            {
+                "entity": "April",
+                "from_index": 120,
+                "to_index": 125,
+                "label": "date_range"
+            }
+        ]
+    },
+    {
+        "query": "Generate a Win/Loss report for AB2C3D4E5 and focus on their transactions within the Sportsbook product during May.",
+        "entities": [
+            {
+                "entity": "AB2C3D4E5",
+                "from_index": 31,
+                "to_index": 40,
+                "label": "user"
+            },
+            {
+                "entity": "Sportsbook",
+                "from_index": 84,
+                "to_index": 94,
+                "label": "product_detail"
+            },
+            {
+                "entity": "May",
+                "from_index": 110,
+                "to_index": 113,
+                "label": "date_range"
+            }
+        ]
+    },
+    {
+        "query": "Could you please generate a Win/Loss report for ABUser ID: AB4235, who is an Active Member and was active within the Sportsbook Product with specific details from June 1st to July 15th?",
+        "entities": [
+            {
+                "entity": "AB4235",
+                "from_index": 59,
+                "to_index": 65,
+                "label": "user"
+            },
+            {
+                "entity": "Active Member",
+                "from_index": 77,
+                "to_index": 90,
+                "label": "level"
+            },
+            {
+                "entity": "Sportsbook Product",
+                "from_index": 117,
+                "to_index": 135,
+                "label": "product_detail"
+            },
+            {
+                "entity": "June 1st to July 15th",
+                "from_index": 163,
+                "to_index": 184,
+                "label": "date_range"
+            }
+        ]
+    },
+    {
+        "query": "I need the Win/Loss report for user AB4235, an Active Member, who was active in the Sportsbook Product from May 1st to June 1st.",
+        "entities": [
+            {
+                "entity": "AB4235",
+                "from_index": 36,
+                "to_index": 42,
+                "label": "user"
+            },
+            {
+                "entity": "Active Member",
+                "from_index": 47,
+                "to_index": 60,
+                "label": "level"
+            },
+            {
+                "entity": "Sportsbook Product",
+                "from_index": 84,
+                "to_index": 102,
+                "label": "product_detail"
+            },
+            {
+                "entity": "May 1st to June 1st",
+                "from_index": 108,
+                "to_index": 127,
+                "label": "date_range"
+            }
+        ]
+    },
+    {
+        "query": "Please provide the Win/Loss report for user AB4235 who is an Active Member and was active in Sportsbook Product from June 1st to July 15th.",
+        "entities": [
+            {
+                "entity": "AB4235",
+                "from_index": 44,
+                "to_index": 50,
+                "label": "user"
+            },
+            {
+                "entity": "Active Member",
+                "from_index": 61,
+                "to_index": 74,
+                "label": "level"
+            },
+            {
+                "entity": "Sportsbook Product",
+                "from_index": 93,
+                "to_index": 111,
+                "label": "product_detail"
+            },
+            {
+                "entity": "June 1st to July 15th",
+                "from_index": 117,
+                "to_index": 138,
+                "label": "date_range"
+            }
+        ]
+    },
+    {
+        "query": "Can you provide a Win/Loss report for ABCTEST123, a Direct Member, who was active on the Sportsbook Product with details during March 2024?",
+        "entities": [
+            {
+                "entity": "ABCTEST123",
+                "from_index": 38,
+                "to_index": 48,
+                "label": "user"
+            },
+            {
+                "entity": "Direct Member",
+                "from_index": 52,
+                "to_index": 65,
+                "label": "level"
+            },
+            {
+                "entity": "Sportsbook Product",
+                "from_index": 89,
+                "to_index": 107,
+                "label": "product_detail"
+            },
+            {
+                "entity": "March 2024",
+                "from_index": 128,
+                "to_index": 138,
+                "label": "date_range"
+            }
+        ]
+    },
+    {
+        "query": "Generate a report showing the activities of user ABCTEST123 during April for their involvement in Sportsbook.",
+        "entities": [
+            {
+                "entity": "ABCTEST123",
+                "from_index": 49,
+                "to_index": 59,
+                "label": "user"
+            },
+            {
+                "entity": "Sportsbook",
+                "from_index": 98,
+                "to_index": 108,
+                "label": "product_detail"
+            },
+            {
+                "entity": "April",
+                "from_index": 67,
+                "to_index": 72,
+                "label": "date_range"
+            }
+        ]
+    },
+    {
+        "query": "I need a detailed performance report for the user ABCTEST123 in the Sportsbook Product from May to July this year.",
+        "entities": [
+            {
+                "entity": "ABCTEST123",
+                "from_index": 50,
+                "to_index": 60,
+                "label": "user"
+            },
+            {
+                "entity": "Sportsbook Product",
+                "from_index": 68,
+                "to_index": 86,
+                "label": "product_detail"
+            },
+            {
+                "entity": "May to July this year",
+                "from_index": 92,
+                "to_index": 113,
+                "label": "date_range"
+            }
+        ]
+    },
+    {
+        "query": "Provide a summary report for the user ABCTEST123 with their activities in the Sportsbook Product during the month of June.",
+        "entities": [
+            {
+                "entity": "ABCTEST123",
+                "from_index": 38,
+                "to_index": 48,
+                "label": "user"
+            },
+            {
+                "entity": "Sportsbook Product",
+                "from_index": 78,
+                "to_index": 96,
+                "label": "product_detail"
+            },
+            {
+                "entity": "month of June",
+                "from_index": 108,
+                "to_index": 121,
+                "label": "date_range"
+            }
+        ]
+    },
+    {
+        "query": "Please generate a performance report for user ABCTEST123 involved in the Sportsbook Product between February and April.",
+        "entities": [
+            {
+                "entity": "ABCTEST123",
+                "from_index": 46,
+                "to_index": 56,
+                "label": "user"
+            },
+            {
+                "entity": "Sportsbook Product",
+                "from_index": 73,
+                "to_index": 91,
+                "label": "product_detail"
+            },
+            {
+                "entity": "between February and April",
+                "from_index": 92,
+                "to_index": 118,
+                "label": "date_range"
+            }
+        ]
+    },
+    {
+        "query": "Can you provide a Win/Loss report for user A123, specifically focusing on their activities within the Sportsbook Product during the period of January 1st to February 15th?",
+        "entities": [
+            {
+                "entity": "Sportsbook",
+                "from_index": 102,
+                "to_index": 112,
+                "label": "product_detail"
+            },
+            {
+                "entity": "January 1st to February 15th",
+                "from_index": 142,
+                "to_index": 170,
+                "label": "date_range"
+            },
+            {
+                "entity": "A123",
+                "from_index": 43,
+                "to_index": 47,
+                "label": "user"
+            }
+        ]
+    },
+    {
+        "query": "I need the performance summary of user B567 in the Sportsbook Product from April 20th to May 30th.",
+        "entities": [
+            {
+                "entity": "Sportsbook",
+                "from_index": 51,
+                "to_index": 61,
+                "label": "product_detail"
+            },
+            {
+                "entity": "April 20th to May 30th",
+                "from_index": 75,
+                "to_index": 97,
+                "label": "date_range"
+            },
+            {
+                "entity": "B567",
+                "from_index": 39,
+                "to_index": 43,
+                "label": "user"
+            }
+        ]
+    },
+    {
+        "query": "Generate a report for user C890's performance in the Sportsbook Product between June 5th and July 1st.",
+        "entities": [
+            {
+                "entity": "Sportsbook",
+                "from_index": 53,
+                "to_index": 63,
+                "label": "product_detail"
+            },
+            {
+                "entity": "June 5th and July 1st",
+                "from_index": 80,
+                "to_index": 101,
+                "label": "date_range"
+            },
+            {
+                "entity": "C890",
+                "from_index": 27,
+                "to_index": 31,
+                "label": "user"
+            }
+        ]
+    },
+    {
+        "query": "Provide a detailed performance report for user D123 in the Sportsbook Product covering July 15th to August 20th.",
+        "entities": [
+            {
+                "entity": "Sportsbook",
+                "from_index": 59,
+                "to_index": 69,
+                "label": "product_detail"
+            },
+            {
+                "entity": "July 15th to August 20th",
+                "from_index": 87,
+                "to_index": 111,
+                "label": "date_range"
+            },
+            {
+                "entity": "D123",
+                "from_index": 47,
+                "to_index": 51,
+                "label": "user"
+            }
+        ]
+    },
+    {
+        "query": "Could you compile a performance report for user E456 in the Sportsbook Product from September 10th to October 1st?",
+        "entities": [
+            {
+                "entity": "Sportsbook",
+                "from_index": 60,
+                "to_index": 70,
+                "label": "product_detail"
+            },
+            {
+                "entity": "September 10th to October 1st",
+                "from_index": 84,
+                "to_index": 113,
+                "label": "date_range"
+            },
+            {
+                "entity": "E456",
+                "from_index": 48,
+                "to_index": 52,
+                "label": "user"
+            }
+        ]
+    }
+]
