@@ -3,7 +3,7 @@
     "type": "function",
     "function": {
       "name": "/get_winlost_detail_report",
-      "description": "Retrieves a detailed report on win/loss statistics for betting activities, providing insights into total bets, winnings, losses, and other relevant metrics. This report helps analyze betting performance over a specified period.",
+      "description": "Retrieves a detailed report on win/loss statistics for betting activities, providing insights into total bets, winnings, losses, and other relevant metrics. This report helps analyze betting performance over a specified period and give you the summary about all transaction you or other user placed bet.",
       "parameters": {
         "type": "object",
         "properties": {
@@ -141,7 +141,7 @@
       }
     }
   },
-  {
+  { 
     "type": "function",
     "function": {
       "name": "/create_account",
@@ -149,42 +149,26 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "username": {
-            "type": "string",
-            "description": "The username for the new account."
+          "n_accounts": {
+            "type": "integer",
+            "description": "The number of accounts will be created."
           },
-          "password": {
-            "type": "string",
-            "description": "The password for the new account."
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "description": "The email address associated with the account."
-          },
-          "phone_number": {
-            "type": "string",
-            "description": "The phone number associated with the account."
-          },
-          "credit_limit": {
-            "type": "number",
-            "description": "The initial credit limit assigned to the account."
+          "given_credit": {
+            "type": "float",
+            "description": "The initial credit limit assigned to the account. The default currency is Ringgit (RM)"
           },
           "line_id": {
             "type": "string",
             "description": "The Line ID associated with the user."
           },
-          "referrer_id": {
-            "type": "string",
-            "description": "The ID of the referring user, if applicable."
-          },
           "account_type": {
             "type": "string",
-            "enum": ["standard", "premium", "admin"],
+            "enum": ["Direct Member", "Agent", "Master Agent", "Super Agent"],
+            "default": "Direct Member",
             "description": "The type of account being created."
           }
         },
-        "required": ["username", "password", "email"]
+        "required": ["n_accounts", "given_credit", "line_id"]
       }
     }
   }]

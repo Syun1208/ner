@@ -13,15 +13,6 @@ class ARBServiceImpl(ARBService):
         self.function_calling_conversation_agent = function_calling_conversation_agent
 
 
-    def get_responding(self, user_id: str, message: str) -> str:
-        response = self.function_calling_conversation_agent.responding(user_id, message)
-        print("😊 ME: ", message)
-        print("🤖 BOT: ", response)
+    def chat(self, user_id: str, message: str) -> str:
+        response = self.function_calling_conversation_agent.get_response(user_id, message)
         return response
-    
-
-    def get_alpha_response(self, user_id: str, message: str) -> AlphaMetadata:
-        meta_data_response = self.function_calling_conversation_agent.alpha_responding(user_id, message)
-        print("😊 ME: ", message)
-        print("🤖 BOT: ", meta_data_response.response)
-        return meta_data_response

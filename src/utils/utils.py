@@ -12,7 +12,7 @@ def load_yaml(file_path: str):
         return None
     
 def load_json(path) -> Dict[str, Any]:
-    with open(path, 'r') as json_file:
+    with open(path, 'r', encoding="utf-8") as json_file:
         documents = json.load(json_file)
     return documents
 

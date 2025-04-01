@@ -7,10 +7,6 @@ class FunctionCallingConversationAgent(ABC):
         pass
 
     @abstractmethod
-    def responding(self, user_id: int, session_id: str, message: str) -> str:
-        pass
-
-    @abstractmethod
-    def alpha_responding(self, user_id: int, message: str) -> AlphaMetadata:
+    def get_response(self, user_id: int, message: str) -> AlphaMetadata:
         pass
     
