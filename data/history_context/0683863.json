@@ -1,0 +1,59 @@
+[
+    {
+        "role": "system",
+        "content": "Now is 2025-04-01 12:09:07\n                    Now, User want to do an action. You are a chatbot that helps users perform basic tasks like getting performance report.                     Based on the user's command, extract the necessary information accurately to fulfill the request.                     You must automatically infer the time period based on the user's request.                                        STRICT GUIDELINES (MUST BE FOLLOWED):                        1. DO NOT ASSUME OR FILL IN MISSING INFORMATION BY YOURSELF. Always ask the user for clarification if any detail is unclear.                        2. MUST CONFIRM ALL ARGUMENTS AND THE NEXT ACTION WITH THE USER before executing any function, ensuring the extracted information is correct.                        3. FUNCTION NAMES MUST REMAIN UNCHANGED. You must strictly select function names and their arguments only from the predefined function list.                             Under no circumstances should you generate, modify, translate, or alter function names or arguments.                             If an argument is not in the function’s definition, you must rise a warning for user.                            If a required argument is missing, request it instead of assuming or generating values.                             Only return the exact function and arguments as defined—no extra parameters, no modifications.                        4. DO NOT CALL ANY TOOL IF REQUIRED PARAMETERS ARE MISSING. If any required parameter is not provided, ask the user to supply the missing information before proceeding.\n                    FAILURE TO FOLLOW THESE RULES MAY RESULT IN INCORRECT FUNCTION EXECUTION.                                        IMPORTANT NOTES:                         1. MUST CONFIRM ALL ARGUMENTS WITH THE USER BEFORE EXECUTING ANY FUNCTION                 "
+    },
+    {
+        "role": "user",
+        "content": "Hello(MUST confirm for me all agurments and actions before calling tool! Now is 2025-04-01 12:09:07)"
+    },
+    {
+        "role": "assistant",
+        "content": "Of course, I'm here to help. Could you please specify what action you would like to take? For example, do you want to get a performance report or create new accounts? Please provide me with all the necessary details so that I can assist you accurately."
+    },
+    {
+        "role": "user",
+        "content": "I want to get Winlost Report please(MUST confirm for me all agurments and actions before calling tool! Now is 2025-04-01 12:31:43)"
+    },
+    {
+        "role": "assistant",
+        "content": "Sure, I can help with that. Could you please specify the start date (`from_date`) and end date (`to_date`) for the Win/Loss report? Additionally, do you want to filter by user level, product type, or specific product details?\n\nIf not specified otherwise, the default will be set to \"All\". If there's a particular username you would like to include in the report, please provide that as well.\n\nPlease confirm all these details before I proceed with generating the report."
+    },
+    {
+        "role": "user",
+        "content": "Get me a Win Loss Detail Report on day 10(MUST confirm for me all agurments and actions before calling tool! Now is 2025-04-01 12:32:12)"
+    },
+    {
+        "role": "assistant",
+        "content": "To generate the Win/Loss Detail Report, I need to know the start date (`from_date`) which would be 10 days prior to today's date (April 1, 2025).\n\nThe end date (`to_date`) will be April 1, 2025.\n\nDo you want any specific filters for user level, product type, or specific product details? If not specified otherwise, the defaults will be set to \"All\".\n\nPlease confirm if this is correct and provide any additional details you might need:\n\n- `from_date`: March 22, 2025\n- `to_date`: April 1, 2025\n- User level: All (default)\n- Product type: All (default)\n- Specific product details: All (default)\n\nAlso, let me know if you want to include a specific username."
+    },
+    {
+        "role": "user",
+        "content": "It's enough.(MUST confirm for me all agurments and actions before calling tool! Now is 2025-04-01 12:32:29)"
+    },
+    {
+        "role": "assistant",
+        "content": "Based on your confirmation, here are the details I will use to generate the Win/Loss Detail Report:\n\n- `from_date`: March 22, 2025\n- `to_date`: April 1, 2025\n- User level: All (default)\n- Product type: All (default)\n- Specific product details: All (default)\n\nPlease confirm if you want to proceed with these settings."
+    },
+    {
+        "role": "user",
+        "content": "I confirmed it(MUST confirm for me all agurments and actions before calling tool! Now is 2025-04-01 12:32:43)"
+    },
+    {
+        "role": "tool",
+        "tool_calls": [
+            {
+                "function": {
+                    "name": "/get_winlost_detail_report",
+                    "arguments": {
+                        "from_date": "2025-03-22",
+                        "level": "All",
+                        "product": "All",
+                        "product_detail": "All",
+                        "to_date": "2025-04-01"
+                    }
+                }
+            }
+        ]
+    }
+]

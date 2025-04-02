@@ -26,7 +26,7 @@ async def health_check() -> JSONResponse:
         )
 
     
-@arb_router.post('/chat')
+@arb_router.post('/api/v1/alpha/chat')
 @inject
 async def chat(
     request: Request,
@@ -34,7 +34,8 @@ async def chat(
 ) -> JSONResponse:
     try:
         params = await request.json()
-        response = arb_service.chat(user_id=params['user_id'], message=params['message'])
+        print(params)
+        response = arb_service.chat(user_id=params['data']['user_id'], message=params['data']['query'])
         return JSONResponse(
             content=jsonable_encoder({
                 'status_code': 200,
@@ -45,7 +46,7 @@ async def chat(
         )
         
     except Exception as e:
-        raise e
+        
         return JSONResponse(
                 content=jsonable_encoder({
                     'status_code': 500,
