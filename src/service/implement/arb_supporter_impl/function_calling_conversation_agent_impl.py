@@ -4,6 +4,7 @@ import json
 import requests
 from datetime import datetime
 from typing import List
+from langdetect import detect
 
 from src.service.interface.arb_supporter.function_calling_conversation_agent import FunctionCallingConversationAgent
 from src.utils.utils import load_json, to_json
@@ -29,8 +30,13 @@ class FunctionCallingConversationAgentImpl(FunctionCallingConversationAgent):
     
     def __load_function_list(self):
         function_list_path = self.function_calling_conversation_agent_config['function_list_path']
-        self.function_list =  load_json(function_list_path)
-    
+        if os.path.exists(function_list_path):
+            self.function_list = []
+            for file_name in os.listdir(function_list_path):
+                if file_name.endswith(".json"):
+                    file_path = os.path.join(function_list_path, file_name)
+                    self.function_list.extend(load_json(file_path))
+
     def start_conversation(self, user_id: int) -> List[dict]:
         history_context_path = self.__get_history_conversation_path(user_id)
         nearest_context_path = self.__get_nearest_function_path(user_id)
@@ -45,7 +51,11 @@ class FunctionCallingConversationAgentImpl(FunctionCallingConversationAgent):
     def get_response(self, user_id: int, message: str) -> AlphaMetadata:
         self.start_conversation(user_id)
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.conversation_chain.append({"role": "user", "content": message + f"(MUST confirm for me all agurments and actions before calling tool! Now is {now})"})
+        detected_language = detect(message)
+        if len(self.conversation_chain)>=10:
+            self.conversation_chain = self.conversation_chain[-10:]
+
+        self.conversation_chain.append({"role": "user", "content": message + f"(MUST confirm for me all agurments and actions before calling tool! Now is {now})! Please response me by {detected_language}"})
 
         # initial 
         is_action = False

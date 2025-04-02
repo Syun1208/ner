@@ -2,7 +2,7 @@ server:
   http:
     host: "0.0.0.0"
     nthreads: 4
-    port: 5000
+    port: 4000
 
 default:
   app_name: "ALPHA REPORT CHATBOT"
@@ -21,4 +21,4 @@ function_calling_conversation_agent:
   llm_api_url: "https://saillm.oneops.net/api/chat"
   model: "qwen2.5:14b"
   temperature: 1
-  function_list_path: "./data/function_list/function_list.json"
+  function_list_path: "./data/function_list/"
