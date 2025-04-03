@@ -1,4 +1,5 @@
 import dataclasses
+from typing import Dict, Any
 
 @dataclasses.dataclass
 class Params:
@@ -9,6 +10,9 @@ class Params:
     level: str
     user: str
     
+    def to_dict(self) -> Dict[str, str]:
+        return dataclasses.asdict(self)
+
 @dataclasses.dataclass
 class AlphaMetadata:
     user_id: str
@@ -17,3 +21,13 @@ class AlphaMetadata:
     endpoint: str
     params: Params
     response: str
+    
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "user_id": self.user_id,
+            "is_new_session": self.is_new_session,
+            "is_action": self.is_action,
+            "endpoint": self.endpoint,
+            "params": self.params.to_dict(),
+            "response": self.response,
+        }

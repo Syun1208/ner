@@ -122,7 +122,7 @@ class FunctionCallingExtraction(FunctionCallingAgent):
             format_schema=self.format_output
         )
         
-        return json.loads(response['message']['content'])
+        return json.loads(response)['function_called']
 
 
 

@@ -10,10 +10,10 @@ key_router = APIRouter(tags=["API Key Authentication"])
 @key_router.get('/api/v1/{department}/generate_key')
 @inject
 async def generate_key(
-    department: Department
+    department: str
 ) -> JSONResponse:
     
-    print(f'Department: {department.alpha}')
+    print(f'Department: {department}')
     
     return JSONResponse(
         content=jsonable_encoder({

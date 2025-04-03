@@ -77,4 +77,4 @@ class ConfirmationAgentImpl(ConfirmationAgent):
             format_schema=format_schema
         )
 
-        return json.loads(response['message']['content'])['is_confirmed']
+        return json.loads(response)['is_confirmed']

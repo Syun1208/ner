@@ -212,7 +212,7 @@ class NerAgentImpl(NerAgent):
             endpoint='/api/chat'
         )
 
-        return json.loads(response['message']['content'])
+        return json.loads(response)
 
 
 

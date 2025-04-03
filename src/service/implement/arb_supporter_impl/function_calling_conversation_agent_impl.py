@@ -2,7 +2,7 @@ import os
 import gc
 from datetime import datetime
 from typing import List, Dict
-from langdetect import detect
+# from langdetect import detect
 
 from src.service.interface.arb_supporter.function_calling_conversation_agent import FunctionCallingConversationAgent
 from src.utils.utils import load_json, to_json

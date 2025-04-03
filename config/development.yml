@@ -16,5 +16,3 @@ llm:
 
 database:
   database_path: "./data/history_context/database.json"
-
-

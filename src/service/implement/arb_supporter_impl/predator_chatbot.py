@@ -1,6 +1,6 @@
 import json
 
-from src.utils.utils import load_json, to_json
+
 from src.model.alpha_metadata import AlphaMetadata, Params
 from src.service.interface.arb_supporter.multi_agent import MultiAgent
 from src.service.interface.arb_supporter.confirmation_agent import ConfirmationAgent
@@ -42,7 +42,6 @@ class PredatorChatbot(MultiAgent):
         self.ner_agent = ner_agent
         self.database = database
         self.function_calling_agent = function_calling_agent
-        self.metadata_chain = []
         
 
 
@@ -73,17 +72,29 @@ class PredatorChatbot(MultiAgent):
         
         # Generate response based on tasks, entities and confirmation
         response = self.casual_conversation_agent.chat(message, entities)
+        print(f'🕵️ Request: {message}\n')
+        print(f'🤖 Response: {response}\n')
         
         # Case 1: is_action
         if is_confirmed and function_called != 'N/A':
             is_action = True
             
         # Case 2: is_new_session
-        latest_function = self.database.get(user_id)[-1]['endpoint']
-        if latest_function != function_called:
-            is_new_session = True
-            self.metadata_chain = []
+        if self.database.get(user_id):
+            latest_function = self.database.get(user_id)[-1]['endpoint']
+            
+            if function_called == 'N/A':
+                function_called = latest_function
+                
+            if latest_function != function_called and function_called != 'N/A':
+                is_new_session = True
+                self.database.update(
+                    user_id=user_id, 
+                    metadata=[]
+                )
         
+        print("🩻 is_new_session: ", is_new_session)
+        print("🩻 is_confirmed: ", is_confirmed)
         # Create params
         params = Params(
             from_date=entities['from_date'],
@@ -93,6 +104,9 @@ class PredatorChatbot(MultiAgent):
             level=entities['level'],
             user=entities['user']
         )
+        if function_called == "N/A":
+            params.from_date = "N/A"
+            params.to_date = "N/A"
         
         # Update the metadata
         alpha_metadata = AlphaMetadata(
@@ -103,12 +117,20 @@ class PredatorChatbot(MultiAgent):
             params=params,
             response=response
         )
-        
+        print("👻 Params: \n")
+        print(alpha_metadata.to_dict())
         # Insert the metadata into the database
-        self.metadata_chain.append(json.dumps(alpha_metadata.__dict__, default=str))
-        self.database.insert(
-            user_id=user_id,
-            metadata=self.metadata_chain
-        )
+        metadata_chain = self.database.get(user_id)
+        if metadata_chain:
+            metadata_chain.append(alpha_metadata.to_dict())
+            self.database.insert(
+                user_id=user_id,
+                metadata=metadata_chain
+            )
+        else:
+            self.database.insert(
+                user_id=user_id,
+                metadata=[alpha_metadata.to_dict()]
+            )
         
         return alpha_metadata

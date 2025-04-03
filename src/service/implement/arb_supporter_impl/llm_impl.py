@@ -57,4 +57,4 @@ class LLMImpl(LLM):
 
         response_data = response.json()
         
-        return response_data
+        return response_data['message']['content']

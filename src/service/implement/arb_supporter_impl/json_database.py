@@ -1,9 +1,10 @@
 import json
-from typing import Dict, Any, Optional
+import os
+from typing import Dict, Any, Optional, List
 
 
 from src.service.interface.arb_supporter.nosql_dabase import NoSQLDatabase
-
+from src.utils.utils import load_json, to_json
 
 
 class JsonDatabase(NoSQLDatabase):
@@ -13,7 +14,7 @@ class JsonDatabase(NoSQLDatabase):
 
     def __init__(
         self, 
-        json_file_path: str
+        database_path: str
     ) -> None:
         """
         Initialize JsonDatabase with path to JSON file.
@@ -21,19 +22,18 @@ class JsonDatabase(NoSQLDatabase):
         Args:
             json_file_path (str): Path to the JSON file to use as storage
         """
-        self.json_file_path = json_file_path
-        self._ensure_file_exists()
+        self.database_path = database_path
+        self.__ensure_folder_exists()
+        self.__init_database()
 
-    def _ensure_file_exists(self):
-        """Create JSON file if it doesn't exist."""
-        try:
-            with open(self.json_file_path, 'r') as f:
-                json.load(f)
-        except FileNotFoundError:
-            with open(self.json_file_path, 'w') as f:
-                json.dump({}, f)
+    def __init_database(self) -> None:
+        to_json(data={}, path=self.database_path)
 
-    def get(self, user_id: str) -> Optional[Dict[str, Any]]:
+    def __ensure_folder_exists(self) -> None:
+        if not os.path.exists(os.path.dirname(self.database_path)):
+            os.makedirs(os.path.dirname(self.database_path))
+    
+    def get(self, user_id: str) -> Dict[str, List[str]]:
         """
         Retrieve user data from JSON file.
 
@@ -41,13 +41,15 @@ class JsonDatabase(NoSQLDatabase):
             user_id: User ID to query
 
         Returns:
-            Optional[Dict[str, Any]]: User data if found, None otherwise
+            Dict[str, List[str]]: User data if found, None otherwise
         """
-        with open(self.json_file_path, 'r') as f:
-            data = json.load(f)
-            return data.get(user_id)
+        
+        data = load_json(path=self.database_path)
+        if not data:
+            return data
+        return data.get(user_id)
 
-    def insert(self, user_id: str, metadata: Dict[str, Any]) -> bool:
+    def insert(self, user_id: str, metadata: List[Dict[str, Any]]) -> bool:
         """
         Insert new user data into JSON file.
 
@@ -59,14 +61,13 @@ class JsonDatabase(NoSQLDatabase):
             bool: True if insert successful, False otherwise
         """
         try:
-            with open(self.json_file_path, 'r') as f:
-                data = json.load(f)
-            
+            data = load_json(self.database_path)
             data[user_id] = metadata
 
-            with open(self.json_file_path, 'w') as f:
-                json.dump(data, f, indent=4)
+            to_json(data=data, path=self.database_path)   
+            
             return True
+       
         except Exception:
             return False
 
@@ -82,15 +83,16 @@ class JsonDatabase(NoSQLDatabase):
             bool: True if update successful, False otherwise
         """
         try:
-            with open(self.json_file_path, 'r') as f:
-                data = json.load(f)
+            data = load_json(path=self.database_path)
             
             if user_id in data:
                 data[user_id].update(metadata)
-                with open(self.json_file_path, 'w') as f:
-                    json.dump(data, f, indent=4)
+                to_json(data=data, path=self.database_path)
+                
                 return True
+            
             return False
+        
         except Exception:
             return False
 
@@ -105,14 +107,14 @@ class JsonDatabase(NoSQLDatabase):
             bool: True if deletion successful, False otherwise
         """
         try:
-            with open(self.json_file_path, 'r') as f:
-                data = json.load(f)
+            data = load_json(path=self.database_path)
             
             if user_id in data:
                 del data[user_id]
-                with open(self.json_file_path, 'w') as f:
-                    json.dump(data, f, indent=4)
+                to_json(data=data, path=self.database_path)
+                
                 return True
+            
             return False
         except Exception:
             return False

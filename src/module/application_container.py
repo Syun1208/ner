@@ -25,12 +25,12 @@ from src.service.implement.arb_supporter_impl.predator_chatbot import PredatorCh
 
 
 class ApplicationContainer(containers.DeclarativeContainer):
-    # set up to get config 
+    # Set up to get config 
     config = providers.Configuration()
     actor_system = providers.Singleton(ActorSystem)
 
-    database = providers.AbstractSingleton(NoSQLDatabase)
-    database.override(
+    arb_database = providers.AbstractSingleton(NoSQLDatabase)
+    arb_database.override(
         providers.Singleton(
             JsonDatabase,
             database_path=config.database.database_path
@@ -87,7 +87,7 @@ class ApplicationContainer(containers.DeclarativeContainer):
             confirmation_agent=confirmation_agent,
             ner_agent=ner_agent,
             function_calling_agent=function_calling_agent,
-            database=database
+            database=arb_database
         )
     )
     
