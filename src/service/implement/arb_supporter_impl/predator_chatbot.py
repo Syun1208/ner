@@ -83,7 +83,7 @@ class PredatorChatbot(MultiAgent):
         if self.database.get(user_id):
             latest_function = self.database.get(user_id)[-1]['endpoint']
             
-            if function_called == 'N/A':
+            if function_called == 'N/A' and latest_function != 'N/A':
                 function_called = latest_function
                 
             if latest_function != function_called and function_called != 'N/A':
