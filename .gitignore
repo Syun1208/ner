@@ -1,0 +1,11 @@
+**/*html
+**/*__pycache__/
+**/*logs/
+.venv
+**/*notebook/*.md
+**/*notebook/*.txt
+**/*notebook/career_images/*
+clean.py
+**/*.csv
+**/*.json
+**/*.txt

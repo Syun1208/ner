@@ -1,0 +1,71 @@
+[{
+    "type": "function",
+    "function": {
+      "name": "/get_winlost_detail_report",
+      "description": "Retrieves a detailed report on win/loss statistics for betting activities, providing insights into a specific user's performance. The report includes information on total bets placed, total winnings, total losses, and other relevant metrics. It helps analyze betting performance over a specified period and provides a summary of all transactions made by the user or other specified users under the specific team. \nThis report is useful for:\n- Tracking individual betting activity or the performance.\n- Analyzing win/loss trends.\n- Understanding commissions and win/loss amount at different levels (Member, Agent, Master, Super).\n- Evaluating overall profitability for the company.\n\nThe output of this function provides detailed metrics, including:\n- **Bet Count**: Refers to the total number of bets placed by a user.\n- **Turnover**: Refers to the total amount of money (stake) that a user has placed on bets, regardless of whether the bets win or lose.\n- **Net Turnover**: (Also called Net Stake) Refers to the total amount wagered by a bettor, excluding any void or canceled bets and after deducting winnings from successful bets (if applicable).\n- **Gross Comm**: Refers to the total commission generated before any deductions.\n- **Win/Loss of Member**: The net result (profit/loss) of a member's betting activity.\n- **Comm of Member**: The commission earned or deducted from the member's bets.\n- **Total of Win/Loss and Comm of Member**: The combined total of the member's win/loss and commission.\n- **Win/Loss of Agent**: The net result of all members under an agent.\n- **Comm of Agent**: The commission earned or deducted at the agent level.\n- **Total of Win/Loss and Comm of Agent**: The combined total of win/loss and commission at the agent level.\n- **Win/Loss of Master**: The net result of all agents under a master.\n- **Comm of Master**: The commission earned or deducted at the master level.\n- **Total of Win/Loss and Comm of Master**: The combined total of win/loss and commission at the master level.\n- **Win/Loss of Super**: The net result of all masters under a super.\n- **Comm of Super**: The commission earned or deducted at the super level.\n- **Total of Win/Loss and Comm of Super**: The combined total of win/loss and commission at the super level.\n- **Company**: The overall win/loss at the company level after all calculations.\n- **Reward (USD)**: The total rewards or bonuses awarded based on betting activity.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "from_date": {
+            "type": "string",
+            "description": "Start date for the report (YYYY-MM-DD)"
+          },
+          "to_date": {
+            "type": "string",
+            "description": "End date for the report (YYYY-MM-DD)"
+          },
+          "product": {
+            "type": "string",
+            "default": "All",
+            "enum": ["All", "Sportsbook", "Number Game", "Virtual Sports", "Saba Casino", "RNG Keno", "AG Casino","Sportsbook 2",
+                    "RNG Slot","Cricket","Allbet","Macau Games","Cash Out","Lottery","Voidbrige Jackpot","Exchange","PP","Arcadia Gaming",
+                    "SG","Saba Promotion","Virtual Games","SA Gaming","Table Game","Live Casino","SABA.games","Togel 4D","RNG Games","AE Sexy",
+                    "IBCBet Live Casino","BBIN","GPI","WM","ION","RNG Casino","Saba Virtual Sports","PG Soft","Joker","BG","MaxGame","Habanero",
+                    "CG","Sports Lottery","Virtual Games","PP Live Casino","Vgaming","AdvantPlay","AdvantPlay Mini","Bitcoin","FGG","SEAL Entertainment",
+                    "MG-RNG","Player Tips","Jili","YeeBet","UU SLOTS","Live22","WE Live Casino","Saba Coins","Yolo Play","Nextspin","SABA xD",
+                    "FastSpin","FA CHAI","GPI Live Casino","PLAYSTAR","HOTDOG","ON Casino","Smartsoft","Playtech","SABA Keno","ASKMESLOT","Funky Games", 
+                    "Live Casino", "RNG Casino"],
+            "description": "Filter by the type of product (default: All)"
+          },
+          "product_detail": {
+            "type": "string",
+            "default": "All",
+            "enum": ["All",
+            "SABA Basketball",
+            "SABA Basketball PinGoal",
+            "SABA E-Sports PinGoal",
+            "SABA Other Sports",
+            "SABA Soccer",
+            "SABA Soccer PinGoal",
+            "SABA Tennis",
+            "Sportsbook",
+            "Allbet Promotion",
+            "PP Jackpot Contribution",
+            "PP Jackpot Prize",
+            "SG Jackpot Contribution",
+            "SG Jackpot Prize",
+            "AE Sexy Lucky Draw",
+            "Vgaming Promotion Prize",
+            "MG-RNG Promotion Prize",
+            "Live22 Promotion Prize",
+            "FastSpin Promotion Prize",
+            "FA CHAI Promotion Prize",
+            "ASKMESLOT Promotion Prize"],
+            "description": "Filter by specific games within the selected product (default: All)"
+          },
+          "level": {
+            "type": "string",
+            "default": "All",
+            "enum": ["All", "Super Agent", "Master Agent", "Agent", "Direct Member"],
+            "description": "Filter by level (All, Master Agent, Direct Member etc.)."
+          },
+          "user": {
+            "type": "string",
+            "description": " Filter by a specific user or all downlines",
+            "default": null
+          }
+        },
+        "required": ["from_date", "to_date"]
+      }
+    }
+  }]

@@ -9,16 +9,12 @@ default:
   env: "LOCAL"
   available_num_processes: 4
   
-data_path: 
-  history_context_folder: "./data/history_context/"
 
-normal_conversation_agent:
-  llm_api_url: "https://ollama.selab.edu.vn/api/chat"
+llm:
+  api: "https://ollama.selab.edu.vn"
   model: "qwen2.5:14b"
-  temperature: 1
 
-function_calling_conversation_agent:
-  llm_api_url: "https://ollama.selab.edu.vn/api/chat"
-  model: "qwen2.5:14b"
-  temperature: 1
-  function_list_path: "./data/function_list/function_list.json"
+database:
+  database_path: "./data/history_context/database.json"
+
+
