@@ -1,5 +1,5 @@
 import json
-
+from typing import Dict
 
 from src.model.alpha_metadata import AlphaMetadata, Params
 from src.service.interface.arb_supporter.multi_agent import MultiAgent
@@ -43,7 +43,26 @@ class PredatorChatbot(MultiAgent):
         self.database = database
         self.function_calling_agent = function_calling_agent
         
-
+        
+    @staticmethod
+    def __update_entities(previous_params: Dict[str, str], current_params: Dict[str, str]) -> Dict[str, str]:
+        """
+        Update the params from the from_params to the to_params
+        Args:
+            previous_params: The previous params
+            current_params: The current params
+        Returns:
+            The updated params
+        """
+        if not previous_params:
+            return current_params
+        
+        del current_params['date_range']
+        updated_params = current_params.copy()
+        for key, value in updated_params.items():
+            if value == "N/A" or value == 'All':
+                updated_params[key] = previous_params[key]
+        return updated_params
 
     def chat(self, user_id: str, message: str) -> AlphaMetadata:
         """
@@ -66,14 +85,9 @@ class PredatorChatbot(MultiAgent):
         
         # Get confirmation for the detected tasks and entities
         is_confirmed = self.confirmation_agent.get_decision(message)
-        
+        print('Type of is_confirmed: ', type(is_confirmed))
         # Get the function calling
         function_called = self.function_calling_agent.call_function(message)
-        
-        # Generate response based on tasks, entities and confirmation
-        response = self.casual_conversation_agent.chat(message, function_called, entities)
-        print(f'🕵️ Request: {message}\n')
-        print(f'🤖 Response: {response}\n')
         
         # Convert endpoint to None if it is N/A
         if function_called == "N/A":
@@ -82,21 +96,32 @@ class PredatorChatbot(MultiAgent):
 
         # Get the latest function
         previous_function = None
+        previous_params = {}
         if self.database.get(user_id):
-            previous_function = self.database.get(user_id)[-1]['endpoint']
+            user_database = self.database.get(user_id)
+            previous_function = user_database[-1]['endpoint']
+            previous_params = user_database[-1]['params']
+        
+        # Update the params
+        current_entities = self.__update_entities(previous_params, entities)
 
-        # Case 1: is_action
-        if is_confirmed and function_called is not None:
-            function_called = previous_function
+
+        # Case 1: is_action            
+        if is_confirmed:
             is_action = True
-            
+        print('🤖 is_action: ', is_action)
         # Case 2: is_new_session
         
-        # Case update function when the query is not the greeting conversation
+        # Save the function called
         if function_called is None and previous_function is not None:
             function_called = previous_function
-            
         print('🤖 previous_function: ', previous_function)
+        print('🤖 function_called updated: ', function_called)
+        
+        # Generate response based on tasks, entities and confirmation
+        response = self.casual_conversation_agent.chat(message, function_called, entities, is_confirmed)
+        print(f'🕵️ Request: {message}\n')
+        print(f'🤖 Response: {response}\n')
         
         # Case update function when the query is the greeting conversation
         if previous_function != function_called and previous_function is not None:
@@ -107,6 +132,12 @@ class PredatorChatbot(MultiAgent):
             )
             print('🤖 db_update_status: ', db_update_status)
         
+        if not is_new_session:
+            entities = current_entities
+            
+        print('🤖 current_params: \n', self.casual_conversation_agent.format_entities_for_prompt(entities))
+        print('🤖 previous_params: \n', self.casual_conversation_agent.format_entities_for_prompt(previous_params))
+            
         print("🩻 is_new_session: ", is_new_session)
         print("🩻 is_confirmed: ", is_confirmed)
         # Create params
@@ -119,14 +150,24 @@ class PredatorChatbot(MultiAgent):
             user=entities['user']
         )
         
+        # Update the metadata
+        alpha_metadata4database = AlphaMetadata(
+            user_id=user_id,
+            is_new_session=is_new_session,
+            is_action=is_action,
+            endpoint=function_called,
+            params=params,
+            response=response
+        )
+        
         # Convert field user to None if it is N/A
         if params.user == "N/A":
             params.user = None
         
         # Convert params to None if from_date or function_called is N/A
-        if params.from_date == "N/A" or function_called is None or not is_action:
+        if not is_action:
             params = None
-
+            function_called = None
         
         # Update the metadata
         alpha_metadata = AlphaMetadata(
@@ -139,11 +180,12 @@ class PredatorChatbot(MultiAgent):
         )
         
         print("👻 Params: \n")
-        print(alpha_metadata.to_dict())
+        print(self.casual_conversation_agent.format_entities_for_prompt(alpha_metadata.to_dict()))
+        
         # Insert the metadata into the database
         metadata_chain = self.database.get(user_id)
         if metadata_chain:
-            metadata_chain.append(alpha_metadata.to_dict())
+            metadata_chain.append(alpha_metadata4database.to_dict())
             self.database.insert(
                 user_id=user_id,
                 metadata=metadata_chain
@@ -151,7 +193,7 @@ class PredatorChatbot(MultiAgent):
         else:
             self.database.insert(
                 user_id=user_id,
-                metadata=[alpha_metadata.to_dict()]
+                metadata=[alpha_metadata4database.to_dict()]
             )
         
         return alpha_metadata

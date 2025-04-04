@@ -34,7 +34,7 @@ class CasualConversationAgentImpl(NormalConversationAgent):
     
     
     @staticmethod
-    def __format_entities_for_prompt(entities: Dict[str, str]) -> str:
+    def format_entities_for_prompt(entities: Dict[str, str]) -> str:
         """
         Converts a dictionary of entities into a formatted string representation.
         
@@ -48,16 +48,21 @@ class CasualConversationAgentImpl(NormalConversationAgent):
         for key, value in entities.items():
             # Convert snake_case to Title Case
             formatted_key = " ".join(word.capitalize() for word in key.split('_'))
-            formatted_str += f"        - {formatted_key}: '{value}'\n"
+            formatted_str += f"- {formatted_key}: '{value}'\n"
         return formatted_str.rstrip()
         
         
         
-    def __get_user_prompt(self, message: str, function_called: str, entities: Dict[str, Any]) -> str:
+    def __get_user_prompt(self, message: str, function_called: str, entities: Dict[str, Any], is_confirmed: bool) -> str:
         
-        formatted_entities = self.__format_entities_for_prompt(entities)
+        formatted_entities = self.format_entities_for_prompt(entities)
         function_name = FUNCTION_MAPPING_NAME[function_called]
         print('🤖 FUNCTION_MAPPING_NAME: ', function_name)
+        
+        if is_confirmed:
+            prompt_confirmed = "It seems that you have confirmed the information, please proceed to generate the report."
+        else:
+            prompt_confirmed = "It seems that you have not confirmed the information, please ask user to confirm the information again."
         
         user_prompt = f"""
         You are a friendly and helpful assistant. Please respond to the user's message in a casual and conversational way.
@@ -79,6 +84,9 @@ class CasualConversationAgentImpl(NormalConversationAgent):
         
         # Current Function/Report
         {function_name}
+        
+        # Confirmation from user
+        {prompt_confirmed}
 
         # Remember to check for required entities:
         - date_range (this information contains from_date and to_date)
@@ -139,6 +147,13 @@ class CasualConversationAgentImpl(NormalConversationAgent):
         ## User: Hello how are you today?
         ## Assistant: 
             👋 Hello! I'm a 🤖 friendly and helpful assistant from S.A.I Team. How can I assist you today? 😊
+            
+    
+        ## User: Oke, I confirm the information.
+        ## Assistant: 
+            ✅ Alright, I just send the params to the Alpha Team. Please wait for a moment.
+            📊 Here is the Win Loss Detail Report for the date range from 27/03/2025 to 02/04/2025:
+                {formatted_entities}
         
         ## User: I want to get Sportsbook and day 10 only
         ## Entities:
@@ -191,10 +206,10 @@ class CasualConversationAgentImpl(NormalConversationAgent):
     
     
     
-    def chat(self, message: str, function_called: str, entities: Dict[str, Any]) -> str:
+    def chat(self, message: str, function_called: str, entities: Dict[str, Any], is_confirmed: bool) -> str:
         
         # Construct the prompt for function determination with examples
-        user_prompt = self.__get_user_prompt(message, function_called, entities)
+        user_prompt = self.__get_user_prompt(message, function_called, entities, is_confirmed)
 
         messages = [
             {"role": "system", "content": self.system_prompt},

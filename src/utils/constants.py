@@ -70,5 +70,5 @@ FUNCTION_MAPPING_NAME = {
     '/get_super_report': 'Super Report',
     '/get_company_report': 'Company Report',
     '/get_reward_report': 'Reward Report',
-    'N/A': 'Could not find the Function/Report, please give me a valid Function/Report'
+    None: 'Could not find the Function/Report, please give me a valid Function/Report'
 }
