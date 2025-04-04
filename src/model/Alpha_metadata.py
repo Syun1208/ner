@@ -1,5 +1,5 @@
 import dataclasses
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 @dataclasses.dataclass
 class Params:
@@ -19,7 +19,7 @@ class AlphaMetadata:
     is_new_session: bool
     is_action: bool
     endpoint: str
-    params: Params
+    params: Optional[Params]
     response: str
     
     def to_dict(self) -> Dict[str, Any]:
@@ -28,6 +28,6 @@ class AlphaMetadata:
             "is_new_session": self.is_new_session,
             "is_action": self.is_action,
             "endpoint": self.endpoint,
-            "params": self.params.to_dict(),
+            "params": self.params.to_dict() if self.params is not None else None,
             "response": self.response,
         }

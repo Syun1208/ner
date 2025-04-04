@@ -63,7 +63,14 @@ class FunctionCallingExtraction(FunctionCallingAgent):
         prompt = """
             User request: {query}
 
-            # Example requests and responses:
+            # ⚠️Note that:
+            - If the user request is not related to the function, return "N/A"
+            - If the user request is not clear, return "N/A"
+            - If the user request is not related to the function, return "N/A"
+            - If the user request does not contain any functions or report words, return "N/A"
+            
+            
+            #📝Example requests and responses:
             
             Input: "I need to see the win/loss report from last week"
             Output: {{
@@ -96,6 +103,11 @@ class FunctionCallingExtraction(FunctionCallingAgent):
             }}
             
             Input: "I want Sportsbook only"
+            Output: {{
+                "function_called": "N/A"
+            }}
+            
+            Input: "I want change to a little bit, I want to get Product Virtual Sports and product detail Saba Basketball with user level Super Agent"
             Output: {{
                 "function_called": "N/A"
             }}

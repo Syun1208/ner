@@ -68,7 +68,8 @@ class JsonDatabase(NoSQLDatabase):
             
             return True
        
-        except Exception:
+        except Exception as e:
+            print('🤖 insert error: ', e)
             return False
 
     def update(self, user_id: str, metadata: Dict[str, Any]) -> bool:
@@ -85,15 +86,16 @@ class JsonDatabase(NoSQLDatabase):
         try:
             data = load_json(path=self.database_path)
             
-            if user_id in data:
-                data[user_id].update(metadata)
+            if user_id in list(data.keys()):
+                data[user_id] = metadata
                 to_json(data=data, path=self.database_path)
                 
                 return True
             
             return False
         
-        except Exception:
+        except Exception as e:
+            print('🤖 update error: ', e)
             return False
 
     def delete(self, user_id: str) -> bool:
@@ -116,5 +118,6 @@ class JsonDatabase(NoSQLDatabase):
                 return True
             
             return False
-        except Exception:
+        except Exception as e:
+            print('🤖 delete error: ', e)
             return False

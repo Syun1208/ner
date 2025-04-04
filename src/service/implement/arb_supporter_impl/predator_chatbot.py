@@ -71,27 +71,41 @@ class PredatorChatbot(MultiAgent):
         function_called = self.function_calling_agent.call_function(message)
         
         # Generate response based on tasks, entities and confirmation
-        response = self.casual_conversation_agent.chat(message, entities)
+        response = self.casual_conversation_agent.chat(message, function_called, entities)
         print(f'🕵️ Request: {message}\n')
         print(f'🤖 Response: {response}\n')
         
+        # Convert endpoint to None if it is N/A
+        if function_called == "N/A":
+            function_called = None
+        print('🤖 function_called: ', function_called)
+
+        # Get the latest function
+        previous_function = None
+        if self.database.get(user_id):
+            previous_function = self.database.get(user_id)[-1]['endpoint']
+
         # Case 1: is_action
-        if is_confirmed and function_called != 'N/A':
+        if is_confirmed and function_called is not None:
+            function_called = previous_function
             is_action = True
             
         # Case 2: is_new_session
-        if self.database.get(user_id):
-            latest_function = self.database.get(user_id)[-1]['endpoint']
+        
+        # Case update function when the query is not the greeting conversation
+        if function_called is None and previous_function is not None:
+            function_called = previous_function
             
-            if function_called == 'N/A' and latest_function != 'N/A':
-                function_called = latest_function
-                
-            if latest_function != function_called and function_called != 'N/A':
-                is_new_session = True
-                self.database.update(
-                    user_id=user_id, 
-                    metadata=[]
-                )
+        print('🤖 previous_function: ', previous_function)
+        
+        # Case update function when the query is the greeting conversation
+        if previous_function != function_called and previous_function is not None:
+            is_new_session = True
+            db_update_status = self.database.update(
+                user_id=user_id, 
+                metadata=[]
+            )
+            print('🤖 db_update_status: ', db_update_status)
         
         print("🩻 is_new_session: ", is_new_session)
         print("🩻 is_confirmed: ", is_confirmed)
@@ -104,9 +118,15 @@ class PredatorChatbot(MultiAgent):
             level=entities['level'],
             user=entities['user']
         )
-        if function_called == "N/A":
-            params.from_date = "N/A"
-            params.to_date = "N/A"
+        
+        # Convert field user to None if it is N/A
+        if params.user == "N/A":
+            params.user = None
+        
+        # Convert params to None if from_date or function_called is N/A
+        if params.from_date == "N/A" or function_called is None or not is_action:
+            params = None
+
         
         # Update the metadata
         alpha_metadata = AlphaMetadata(
@@ -117,6 +137,7 @@ class PredatorChatbot(MultiAgent):
             params=params,
             response=response
         )
+        
         print("👻 Params: \n")
         print(alpha_metadata.to_dict())
         # Insert the metadata into the database

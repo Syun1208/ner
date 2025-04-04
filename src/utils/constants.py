@@ -56,3 +56,19 @@ class AlphaWinlostInfo:
     ]
 
     LEVEL = ['Super Agent', 'Master Agent', 'Agent', 'Direct Member']
+    
+    
+FUNCTION_MAPPING_NAME = {
+    '/get_winlost_report': 'Win Loss Report',
+    '/get_betcount_report': 'Bet Count Report', 
+    '/get_turnover_report': 'Turnover Report',
+    '/get_net_turnover_report': 'Net Turnover Report',
+    '/get_gross_comm_report': 'Gross Commission Report',
+    '/get_member_report': 'Member Report',
+    '/get_agent_report': 'Agent Report',
+    '/get_master_report': 'Master Report',
+    '/get_super_report': 'Super Report',
+    '/get_company_report': 'Company Report',
+    '/get_reward_report': 'Reward Report',
+    'N/A': 'Could not find the Function/Report, please give me a valid Function/Report'
+}

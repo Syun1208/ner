@@ -2,7 +2,7 @@ from typing import Dict, Any
 
 from src.service.interface.arb_supporter.normal_conversation_agent import NormalConversationAgent
 from src.service.interface.arb_supporter.llm import LLM
-
+from src.utils.constants import FUNCTION_MAPPING_NAME
 
 class CasualConversationAgentImpl(NormalConversationAgent):
     
@@ -53,9 +53,12 @@ class CasualConversationAgentImpl(NormalConversationAgent):
         
         
         
-    def __get_user_prompt(self, message: str, entities: Dict[str, Any]) -> str:
+    def __get_user_prompt(self, message: str, function_called: str, entities: Dict[str, Any]) -> str:
         
         formatted_entities = self.__format_entities_for_prompt(entities)
+        function_name = FUNCTION_MAPPING_NAME[function_called]
+        print('🤖 FUNCTION_MAPPING_NAME: ', function_name)
+        
         user_prompt = f"""
         You are a friendly and helpful assistant. Please respond to the user's message in a casual and conversational way.
 
@@ -73,6 +76,9 @@ class CasualConversationAgentImpl(NormalConversationAgent):
 
         # Current entities
         {formatted_entities}
+        
+        # Current Function/Report
+        {function_name}
 
         # Remember to check for required entities:
         - date_range (this information contains from_date and to_date)
@@ -92,12 +98,14 @@ class CasualConversationAgentImpl(NormalConversationAgent):
             - Product: 'All'
             - Product Detail: 'All'
             - Level: 'All'
-            - User: 'All'
+            - User: 'N/A'
+        ## Current Function/Report:
+            - Win Loss Report
             
         ## Assistant:
             📊 Here is the Win Loss Detail Report for the date range at 02/04/2025:
                 📖 Report Requested by: 'All'
-                👤 Username: 'All'
+                👤 Username: 'N/A'
                 🏢 Product: 'All'
                 📋 Product Detail: 'All'
                 🎮 Level: 'All'
@@ -113,12 +121,14 @@ class CasualConversationAgentImpl(NormalConversationAgent):
             - Product: 'All'
             - Product Detail: 'All'
             - Level: 'All'
-            - User: 'All'
+            - User: 'N/A'
+        ## Current Function/Report:
+            - Win Loss Report
             
         ## Assistant:
             📊 Here is the Win Loss Detail Report for the date range from 27/03/2025 to 02/04/2025:
                 📖 Report Requested by: 'All'
-                👤 Username: 'All'
+                👤 Username: 'N/A'
                 🏢 Product: 'All'
                 📋 Product Detail: 'All'
                 🎮 Level: 'All'
@@ -128,8 +138,29 @@ class CasualConversationAgentImpl(NormalConversationAgent):
         
         ## User: Hello how are you today?
         ## Assistant: 
-            👋 Hello! I'm a 🤖 friendly and helpful assistant. How can I assist you today? 😊
+            👋 Hello! I'm a 🤖 friendly and helpful assistant from S.A.I Team. How can I assist you today? 😊
         
+        ## User: I want to get Sportsbook and day 10 only
+        ## Entities:
+            - Date Range: 'day 10'
+            - From Date: '10/04/2025'
+            - To Date: '10/04/2025'
+            - Product: 'Sportsbook'
+            - Product Detail: 'All'
+            - Level: 'All'
+            - User: 'N/A'
+        ## Current Function/Report:
+            - Win Loss Report
+        ## Assistant: 
+            📊 Here is the Win Loss Detail Report for the date range at 10/04/2025:
+                📖 Report Requested by: 'All'
+                👤 Username: 'N/A'
+                🏢 Product: 'Sportsbook'
+                📋 Product Detail: 'All'
+                🎮 Level: 'All'
+                📅 Date Range: 10/04/2025
+                
+            ✅ Alright, would you like to confirm this information to get report?
         
         ## User: Get me a Turnover Detail Report for Sportsbook Product
         ## Entities: 
@@ -139,12 +170,14 @@ class CasualConversationAgentImpl(NormalConversationAgent):
             - Product: 'Sportsbook'
             - Product Detail: 'All'
             - Level: 'All'
-            - User: 'All'
+            - User: 'N/A'
+        ## Current Function/Report:
+            - Turnover Report
             
         ## Assistant:
             📊 Here is the Win Loss Detail Report for the date range from 02/04/2025 to 02/04/2025:
                 📖 Report Requested by: 'All'
-                👤 Username: 'All'
+                👤 Username: 'N/A'
                 🏢 Product: 'Sportsbook'
                 📋 Product Detail: 'All'
                 🎮 Level: 'All'
@@ -158,10 +191,10 @@ class CasualConversationAgentImpl(NormalConversationAgent):
     
     
     
-    def chat(self, message: str, entities: Dict[str, Any]) -> str:
+    def chat(self, message: str, function_called: str, entities: Dict[str, Any]) -> str:
         
         # Construct the prompt for function determination with examples
-        user_prompt = self.__get_user_prompt(message, entities)
+        user_prompt = self.__get_user_prompt(message, function_called, entities)
 
         messages = [
             {"role": "system", "content": self.system_prompt},
