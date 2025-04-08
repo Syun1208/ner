@@ -1,11 +1,10 @@
 import json
 from typing import List, Dict, Any
-from datetime import datetime
 
 from src.service.interface.arb_supporter.ner_agent import NerAgent
 from src.utils.constants import AlphaWinlostInfo as a
 from src.service.interface.arb_supporter.llm import LLM
-
+from src.utils.utils import get_current_datetime, get_current_year, get_current_month
 
 class NerAgentImpl(NerAgent):
     """
@@ -38,46 +37,13 @@ class NerAgentImpl(NerAgent):
             },
             "required": ["date_range", "from_date", "to_date", "product", "product_detail", "level", "user"]
         }
-        
-        
-        
-    def _get_current_year(self) -> str:
-        """
-        Get the current year in YYYY format.
-        
-        Returns:
-            str: Current year in YYYY format
-        """
-        return datetime.now().strftime("%Y")
-    
-    
-    
-    def _get_current_datetime(self) -> str:
-        """
-        Get the current datetime in YYYY-MM-DD format.
-        
-        Returns:
-            str: Current date in YYYY-MM-DD format
-        """
-        return datetime.now().strftime("%Y-%m-%d")
-
-
-
-    def _get_current_month(self) -> str:
-        """
-        Get the current month in MM format.
-        
-        Returns:
-            str: Current month in MM format
-        """
-        return datetime.now().strftime("%m")
 
 
 
     def _get_user_prompt(self, text: str) -> str:
-        current_date = self._get_current_datetime()
-        current_year = self._get_current_year()
-        current_month = self._get_current_month()
+        current_date = get_current_datetime()
+        current_year = get_current_year()
+        current_month = get_current_month()
 
         user_prompt = f"""
         Current date: {current_date}
@@ -113,7 +79,7 @@ class NerAgentImpl(NerAgent):
            - Use current year {current_year}
            - Set from_date to first day of specified month 
            - Set to_date to last day of specified month
-           Example: "1/1 to 31/1" in 2025 -> from_date: 01/01/2025, to_date: 31/01/2025
+           Example: "1/1 to 31/1" in {current_year} -> from_date: 01/01/{current_year}, to_date: 31/01/{current_year}
            
         5. If no date is specified:
            - Set date_range as "N/A"
@@ -211,7 +177,18 @@ class NerAgentImpl(NerAgent):
             format_schema=self.format,
             endpoint='/api/chat'
         )
-
+        
+        if not json.loads(response):
+            return {
+                "date_range": "N/A",
+                "from_date": "N/A",
+                "to_date": "N/A",
+                "product": "All",
+                "product_detail": "All",
+                "level": "All",
+                "user": "N/A"
+            }
+            
         return json.loads(response)
 
 

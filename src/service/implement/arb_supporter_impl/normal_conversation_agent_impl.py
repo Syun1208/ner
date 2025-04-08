@@ -1,5 +1,6 @@
-from typing import Dict, Any
+from typing import Any
 
+from src.utils.utils import get_current_year, get_current_month, get_current_previous_date, get_last_week_dates, format_entities_for_prompt
 from src.service.interface.arb_supporter.normal_conversation_agent import NormalConversationAgent
 from src.service.interface.arb_supporter.llm import LLM
 from src.utils.constants import FUNCTION_MAPPING_NAME
@@ -32,37 +33,26 @@ class CasualConversationAgentImpl(NormalConversationAgent):
             - Make sure that you must ask user to confirm the information before generating the report. 🎯
         """
     
-    
-    @staticmethod
-    def format_entities_for_prompt(entities: Dict[str, str]) -> str:
-        """
-        Converts a dictionary of entities into a formatted string representation.
-        
-        Args:
-            entities: Dictionary containing entity key-value pairs
-            
-        Returns:
-            Formatted string with entities listed in bullet points
-        """
-        formatted_str = ""
-        for key, value in entities.items():
-            # Convert snake_case to Title Case
-            formatted_key = " ".join(word.capitalize() for word in key.split('_'))
-            formatted_str += f"- {formatted_key}: '{value}'\n"
-        return formatted_str.rstrip()
         
         
+    def __get_user_prompt(self, message: str, *args: Any) -> str:
         
-    def __get_user_prompt(self, message: str, function_called: str, entities: Dict[str, Any], is_confirmed: bool) -> str:
+        function_called = args[0]
+        entities = args[1]
+        is_confirmed = args[2]
         
-        formatted_entities = self.format_entities_for_prompt(entities)
+        current_previous_date = get_current_previous_date()
+        current_year = get_current_year()
+        current_month = get_current_month()
+        from_last_week_date, to_last_week_date = get_last_week_dates()
+
+        formatted_entities = format_entities_for_prompt(entities)
         function_name = FUNCTION_MAPPING_NAME[function_called]
-        print('🤖 FUNCTION_MAPPING_NAME: ', function_name)
         
         if is_confirmed:
-            prompt_confirmed = "It seems that you have confirmed the information, please proceed to generate the report."
+            prompt_confirmed = "⚠️ It seems that you have confirmed the information, please proceed to generate the report."
         else:
-            prompt_confirmed = "It seems that you have not confirmed the information, please ask user to confirm the information again."
+            prompt_confirmed = "❌ It seems that you have not confirmed the information, please ask user to confirm the information again."
         
         user_prompt = f"""
         You are a friendly and helpful assistant. Please respond to the user's message in a casual and conversational way.
@@ -71,13 +61,25 @@ class CasualConversationAgentImpl(NormalConversationAgent):
         {message}
 
 
-        # General conversation:
-        - Recognize whether the entities is enough or not. Note that data range is required.
-        - Maintain a friendly and helpful tone
-        - Acknowledge user's request
-        - Ask for clarification when needed
-        - Use casual language while remaining professional
-        - Ensure that user must be asked to confirm the information before generating the report.
+        # General conversation guidelines:
+        - Check if all required entities are provided, especially date range 📅
+        - Keep a friendly and helpful tone while staying professional 😊
+        - Acknowledge and validate the user's request clearly 👍
+        - Ask politely for any missing information ❓
+        - Use natural, conversational language 💬
+        - For report generation: Always ask for user confirmation. Once user confirms, that means is_confirmed=1, summarize the information and generate the report without asking for confirmation again ✅
+        - Include relevant emojis when listing entities:
+          * 📖 Requested by
+          * 📅 Date Range
+          * 📅 From Date
+          * 📅 To Date
+          * 🏢 Product
+          * 📋 Product Detail  
+          * 🎮 Level
+          * 👤 User
+        - If the current function/report is not found, you must response "I could not find the function/report, please give me a valid function/report" and ask user to provide the function/report again. Otherwise, you should let user know the current function/report that you are generating 📝 📊 📋
+        - You must define which entity is not provided by user and ask user to confirm and provide the information ❓
+
 
         # Current entities
         {formatted_entities}
@@ -86,96 +88,121 @@ class CasualConversationAgentImpl(NormalConversationAgent):
         {function_name}
         
         # Confirmation from user
+        is_confirmed = {is_confirmed}
         {prompt_confirmed}
 
         # Remember to check for required entities:
-        - date_range (this information contains from_date and to_date)
+        - date_range
+        - from_date
+        - to_date
         - product
         - product_detail
         - level
         - user
         
-        # Make sure that you must ask user to confirm the information before generating the report.
+        # The language you must respond to user: ***English***
+
 
         # For example:
         ## User: Get me a Win Loss Detail Report yesterday
         ## Entities: 
             - Date Range: 'yesterday'
-            - From Date: '02/04/2025'
-            - To Date: '02/04/2025'
+            - From Date: '{current_previous_date}/{current_month}/{current_year}'
+            - To Date: '{current_previous_date}/{current_month}/{current_year}'
             - Product: 'All'
             - Product Detail: 'All'
             - Level: 'All'
             - User: 'N/A'
         ## Current Function/Report:
             - Win Loss Report
+        ## Confirmation from user
+            - is_confirmed = 0
+            - It seems that you have not confirmed the information, please ask user to confirm the information again.
             
         ## Assistant:
-            📊 Here is the Win Loss Detail Report for the date range at 02/04/2025:
+            📊 Here is the Win Loss Detail Report for the date range at {current_previous_date}/{current_month}/{current_year}:
                 📖 Report Requested by: 'All'
+                📅 Date Range: 'yesterday'
+                📅 From Date: {current_previous_date}/{current_month}/{current_year}
+                📅 To Date: {current_previous_date}/{current_month}/{current_year}
                 👤 Username: 'N/A'
                 🏢 Product: 'All'
                 📋 Product Detail: 'All'
                 🎮 Level: 'All'
-                📅 Date Range: 02/04/2025
 
-            Alright, would you like to confirm this information to get report?
+            ✅ Alright, would you like to confirm this information to get report?
+            
             
         ## User: Give me a Win Loss Detail report for Sportsbook from last week.
         ## Entities: 
             - Date Range: 'last week'
-            - From Date: '27/03/2025'
-            - To Date: '02/04/2025'
+            - From Date: '{from_last_week_date}'
+            - To Date: '{to_last_week_date}'
             - Product: 'All'
             - Product Detail: 'All'
             - Level: 'All'
             - User: 'N/A'
-        ## Current Function/Report:
-            - Win Loss Report
+        ## Confirmation from user
+            - is_confirmed = 0
+            - It seems that you have not confirmed the information, please ask user to confirm the information again.
             
         ## Assistant:
-            📊 Here is the Win Loss Detail Report for the date range from 27/03/2025 to 02/04/2025:
+            📊 Here is the Win Loss Detail Report for the date range from {from_last_week_date} to {to_last_week_date}:
                 📖 Report Requested by: 'All'
+                📅 Date Range: 'last week'
+                📅 From Date: {from_last_week_date}
+                📅 To Date: {to_last_week_date}
                 👤 Username: 'N/A'
                 🏢 Product: 'All'
                 📋 Product Detail: 'All'
                 🎮 Level: 'All'
-                📅 Date Range: 27/03/2025 - 02/04/2025
 
-            Alright, would you like to confirm this information to get report?
+            ✅ Alright, would you like to confirm this information to get report?
+        
         
         ## User: Hello how are you today?
+        ## Entities:
+            - Date Range: 'N/A'
+            - From Date: 'N/A'
+            - To Date: 'N/A'
+            - Product: 'N/A'
+            - Product Detail: 'N/A'
+            - Level: 'N/A'
+            - User: 'N/A'
+        ## Confirmation from user
+            - is_confirmed = 0
+            - It seems that you have not confirmed the information, please ask user to confirm the information again.
+            
         ## Assistant: 
             👋 Hello! I'm a 🤖 friendly and helpful assistant from S.A.I Team. How can I assist you today? 😊
-            
-    
-        ## User: Oke, I confirm the information.
-        ## Assistant: 
-            ✅ Alright, I just send the params to the Alpha Team. Please wait for a moment.
-            📊 Here is the Win Loss Detail Report for the date range from 27/03/2025 to 02/04/2025:
-                {formatted_entities}
+        
         
         ## User: I want to get Sportsbook and day 10 only
         ## Entities:
             - Date Range: 'day 10'
-            - From Date: '10/04/2025'
-            - To Date: '10/04/2025'
+            - From Date: '10/{current_month}/{current_year}'
+            - To Date: '10/{current_month}/{current_year}'
             - Product: 'Sportsbook'
             - Product Detail: 'All'
             - Level: 'All'
             - User: 'N/A'
-        ## Current Function/Report:
-            - Win Loss Report
+        ## Confirmation from user
+            - is_confirmed = 0
+            - It seems that you have not confirmed the information, please ask user to confirm the information again.
+            
         ## Assistant: 
             📊 Here is the Win Loss Detail Report for the date range at 10/04/2025:
                 📖 Report Requested by: 'All'
+                📅 Date Range: 'day 10'
+                📅 From Date: 10/{current_month}/{current_year}
+                📅 To Date: 10/{current_month}/{current_year}
                 👤 Username: 'N/A'
                 🏢 Product: 'Sportsbook'
                 📋 Product Detail: 'All'
                 🎮 Level: 'All'
-                📅 Date Range: 10/04/2025
                 
             ✅ Alright, would you like to confirm this information to get report?
+        
         
         ## User: Get me a Turnover Detail Report for Sportsbook Product
         ## Entities: 
@@ -186,18 +213,21 @@ class CasualConversationAgentImpl(NormalConversationAgent):
             - Product Detail: 'All'
             - Level: 'All'
             - User: 'N/A'
-        ## Current Function/Report:
-            - Turnover Report
+        ## Confirmation from user
+            - is_confirmed = 0
+            - It seems that you have not confirmed the information, please ask user to confirm the information again.
             
         ## Assistant:
-            📊 Here is the Win Loss Detail Report for the date range from 02/04/2025 to 02/04/2025:
+            📊 Here is the Turnover Detail Report:
                 📖 Report Requested by: 'All'
+                📅 Date Range: 'N/A'
+                📅 From Date: 'N/A'
+                📅 To Date: 'N/A'
                 👤 Username: 'N/A'
                 🏢 Product: 'Sportsbook'
                 📋 Product Detail: 'All'
                 🎮 Level: 'All'
-                📅 Date Range: 'N/A'
-                
+
             ⚠️ However, I could not find any data for the date range, could you please provide the date range? 📅 Because this information is required for generating the report. 🔍
         
         Please respond to the user's message accordingly.
@@ -206,10 +236,10 @@ class CasualConversationAgentImpl(NormalConversationAgent):
     
     
     
-    def chat(self, message: str, function_called: str, entities: Dict[str, Any], is_confirmed: bool) -> str:
+    def chat(self, message: str, *args: Any) -> str:
         
         # Construct the prompt for function determination with examples
-        user_prompt = self.__get_user_prompt(message, function_called, entities, is_confirmed)
+        user_prompt = self.__get_user_prompt(message, *args)
 
         messages = [
             {"role": "system", "content": self.system_prompt},

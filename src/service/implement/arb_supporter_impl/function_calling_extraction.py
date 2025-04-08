@@ -134,7 +134,10 @@ class FunctionCallingExtraction(FunctionCallingAgent):
             format_schema=self.format_output
         )
         
-        return json.loads(response)['function_called']
+        if 'function_called' in json.loads(response):
+            return json.loads(response)['function_called']
+        else:
+            return 'N/A'
 
 
 

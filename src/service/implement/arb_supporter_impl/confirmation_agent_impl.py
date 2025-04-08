@@ -18,16 +18,21 @@ class ConfirmationAgentImpl(ConfirmationAgent):
     @staticmethod
     def __confirm_user_intent(query: str) -> str:
         user_prompt = f"""
-        
-        The user's query usually contains words such "confirm", "accept", "OK", "Let's do it", "I'm ready", so on. These words' pattern is the confirmation of user's query
-        
+
         # ***User's query***
         {query}
+        
+        # General conversation guidelines:
+        - Your task is to accurately detect whether the user's message contains confirmation or rejection
+        - The response must be formatted as {{"is_confirmed": 1}} for confirmation or {{"is_confirmed": 0}} for rejection
+        - Look for confirmation words/phrases always like:
+          * Direct confirmation: "confirm", "yes", "correct", "right", "agreed", "accept", "approve"
+          * Casual confirmation: "ok", "okay", "sure", "alright", "fine", "yep", "yeah"
+          * Action confirmation: "let's do it", "go ahead", "proceed", "continue", "I'm ready", "do it"
+          * Positive acknowledgement: "sounds good", "looks good", "that works", "perfect", "exactly"
+        
 
         # ***Example Scenarios:***
-        
-        - ***User***: "It's enough"
-        - ***Assistant***: {{"is_confirmed": 0}}
         
         - ***User***: "I want to confirm it"
         - ***Assistant***: {{"is_confirmed": 1}}
@@ -76,5 +81,7 @@ class ConfirmationAgentImpl(ConfirmationAgent):
             messages=messages,
             format_schema=format_schema
         )
-
-        return json.loads(response)['is_confirmed']
+        if 'is_confirmed' in json.loads(response):
+            return json.loads(response)['is_confirmed']
+        else:
+            return 0

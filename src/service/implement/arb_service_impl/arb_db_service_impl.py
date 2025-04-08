@@ -3,11 +3,11 @@ import os
 from typing import Dict, Any, Optional, List
 
 
-from src.service.interface.arb_supporter.nosql_dabase import NoSQLDatabase
+from src.service.interface.arb_service.arb_db_service import ARBDBService
 from src.utils.utils import load_json, to_json
 
 
-class JsonDatabase(NoSQLDatabase):
+class ARBDBServiceImpl(ARBDBService):
     """
     Implementation of NoSQLDatabase interface using JSON file storage.
     """

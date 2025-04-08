@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional
 
 
-class NoSQLDatabase(ABC):
+class ARBDBService(ABC):
     """
     Abstract base class defining interface for NoSQL database operations.
     """
