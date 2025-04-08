@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.model.Alpha_metadata import AlphaMetadata
+from src.model.alpha_metadata import AlphaMetadata
 class FunctionCallingConversationAgent(ABC):
 
     @abstractmethod

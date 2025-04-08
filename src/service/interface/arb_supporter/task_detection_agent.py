@@ -6,7 +6,7 @@ class TaskDetectionAgent(ABC):
     Abstract base class for task detection.
     """
 
-
+    @abstractmethod
     def detect_task(self, query: str) -> List[str]:
         """
         Detect the task from the given query.

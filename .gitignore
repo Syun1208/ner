@@ -9,3 +9,4 @@ clean.py
 **/*.csv
 **/*.json
 **/*.txt
+**/*arb/
