@@ -71,6 +71,12 @@ class ARBServiceImpl(ARBService):
                 updated_params[key] = previous_params[key]
         return updated_params
 
+    @staticmethod
+    def __is_different_from_default_entities(entities: Dict[str, str]) -> bool:
+        if entities['from_date'] != 'N/A' and entities['to_date'] != 'N/A' and entities['product'] != 'All' and entities['product_detail'] != 'All' and entities['level'] != 'All' and entities['user'] != 'N/A':     
+            return True
+        return False
+
     def chat(self, user_id: str, message: str) -> AlphaMetadata:
         """
         Process a message through the multi-agent system.
@@ -129,27 +135,43 @@ class ARBServiceImpl(ARBService):
         function_name = FUNCTION_MAPPING_NAME[function_called]
         
         # Define the normal conversation
-        if entities['from_date'] == 'N/A' and entities['to_date'] == 'N/A' and entities['product'] == 'All' and entities['product_detail'] == 'All' and entities['level'] == 'All' and entities['user'] == 'N/A' or function_called is None:
+        if not self.__is_different_from_default_entities(entities) or function_called is None:
             is_normal_conversation = True
+            
+        # if self.__is_different_from_default_entities(entities) and function_called is None:
+        #     is_normal_conversation = False
+            
         print('🤖 is_normal_conversation: ', is_normal_conversation)
         
         # Case update function when the query is the greeting conversation
         if previous_function != function_called and previous_function is not None:
             is_new_session = True
-            db_update_status = self.database.update(
+            self.database.update(
                 user_id=user_id, 
                 metadata=[]
             )
-            print('🤖 db_update_status: ', db_update_status)
         
         if not is_new_session:
             entities = update_entities
             
         # Generate response based on tasks, entities and confirmation
+        # Check if date range is specified
+        message_non_date = ""
+        if entities['from_date'] == 'N/A':
+            message_non_date = "❌ Please specify the date range for your request to proceed with generating the report."
+
+        # Build base response with parameters
+        base_params = f"""
+    👤 Username: {entities['user']}
+    🏢 Product: {entities['product']} 
+    📋 Product Detail: {entities['product_detail']}
+    🎮 Level: {entities['level']}
+    📅 Date Range: {entities['from_date']} - {entities['to_date']}"""
+
+        # Handle action case
         if is_action:
-        
             if entities['from_date'] == 'N/A':
-                response = """
+                response = f"""
 ⚠️ NOTE THAT: 
     📅 From Date: REQUIRED
     📅 To Date: REQUIRED
@@ -157,40 +179,38 @@ class ARBServiceImpl(ARBService):
     📋 Product Detail: Default is All
     🎮 Level: Default is All
     👤 User: Default is N/A
-❌ Please specify the date range for your request to proceed with generating the report.
-                """
-            elif function_called is None:
-                response = f"""
-⚠️ NOTE THAT: You should not confirm the information if you have not specified the function to proceed with generating the report.
-❌ Could not find the Function/Report. Please specify the function to proceed with generating the report.
-                """
+    
+✅YOUR CURRENT PARAMETERS:
+{base_params}
+    
+{message_non_date}"""
             else:
-                response = f"""
-🎲 Here is the summary of {function_name}:
-    👤 Username: {entities['user']}
-    🏢 Product: {entities['product']}
-    📋 Product Detail: {entities['product_detail']}
-    🎮 Level: {entities['level']}
-    📅 Date Range: {entities['from_date']} - {entities['to_date']}
+                response = f"""{base_params}
 
-✅ Your request has been confirmed, please wait for a moment to get the report.
-                """
-                
+✅ Your request has been confirmed, please wait for a moment to get the report."""
+
+        # Handle non-action case
         else:
             if is_normal_conversation:
                 response = self.casual_conversation_agent.chat(message)
             else:
-                response = f"""
-🎲 Here is the summary of {function_name}:
-    👤 Username: {entities['user']}
-    🏢 Product: {entities['product']}
-    📋 Product Detail: {entities['product_detail']}
-    🎮 Level: {entities['level']}
-    📅 Date Range: {entities['from_date']} - {entities['to_date']}
+                response = f"""{base_params}
     
 ⚠️ Would you like to confirm this information and proceed with the report generation?
-                """
-                
+{message_non_date}"""
+
+        # Add header based on function status
+        if function_called is None and not is_normal_conversation:
+            header = "🎲 Here is the summary of parameters:"
+            function_warning = """
+⚠️ NOTE THAT: You should not confirm the information if you have not specified the function to proceed with generating the report.
+❌ Could not find the Function/Report. Please specify the function to proceed with generating the report."""
+            response = f"{header}\n{response}\n{function_warning}"
+        
+        if not is_normal_conversation:
+            header = f"🎲 Here is the summary of parameters for {function_name}:"
+            response = f"{header}\n{response}"
+            
         print(f'🕵️ Request: {message}\n')
         print(f'🤖 Response: {response}\n') 
             
@@ -198,7 +218,6 @@ class ARBServiceImpl(ARBService):
         print('🤖 previous_params: \n', format_entities_for_prompt(previous_params))
             
         print("🩻 is_new_session: ", is_new_session)
-        print("🩻 is_confirmed: ", is_confirmed)
         # Create params
         params = Params(
             from_date=entities['from_date'],

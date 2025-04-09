@@ -20,16 +20,16 @@ class FunctionCallingExtraction(FunctionCallingAgent):
                 "description": "The name of the function to call",
                 "enum": [
                     '/get_winlost_report',
-                    '/get_betcount_report',
+                    # '/get_betcount_report',
                     '/get_turnover_report',
-                    '/get_net_turnover_report',
-                    '/get_gross_comm_report',
-                    '/get_member_report',
-                    '/get_agent_report',
-                    '/get_master_report',
-                    '/get_super_report',
-                    '/get_company_report',
-                    '/get_reward_report',
+                    # '/get_net_turnover_report',
+                    # '/get_gross_comm_report',
+                    # '/get_member_report',
+                    # '/get_agent_report',
+                    # '/get_master_report',
+                    # '/get_super_report',
+                    # '/get_company_report',
+                    # '/get_reward_report',
                     'N/A'
                 ]
             }
@@ -40,16 +40,7 @@ class FunctionCallingExtraction(FunctionCallingAgent):
         You are an AI assistant that helps determine which function to call based on user input.
         Available functions:
             - /get_winlost_report: Get Win/Loss reports with filtering by date, product, and user level. Supports exporting reports (CSV/PDF), comparing trends across time periods, highlighting biggest winners/losers, and detecting unusual betting patterns.
-            - /get_betcount_report: Get bet count reports showing total number of bets placed, filtered by date range, product, and user level. Includes bet frequency analysis, popular bet types, and peak betting times.
-            - /get_turnover_report: Get turnover reports showing total betting volume/activity, with breakdowns by product, date range and user level. Includes trend analysis and comparison features.
-            - /get_net_turnover_report: Get net turnover reports showing betting activity minus payouts/withdrawals. Provides profitability analysis by product, date range and user segments.
-            - /get_gross_comm_report: Get gross commission reports showing total commission earned before deductions, filtered by date, product and agent level. Includes commission tier analysis.
-            - /get_member_report: Get detailed member activity reports including betting patterns, deposits/withdrawals, and account status. Filterable by date range and product.
-            - /get_agent_report: Get agent performance reports showing downline activity, commission earned, and member acquisition. Includes risk monitoring and compliance metrics.
-            - /get_master_report: Get master agent reports with aggregated agent network data, commission structures, and risk exposure. Supports hierarchical view of network.
-            - /get_super_report: Get super master reports with high-level network analytics, risk management metrics, and commission optimization insights.
-            - /get_company_report: Get company-wide performance reports including P&L, turnover, active users and key business metrics across all products and user levels.
-            - /get_reward_report: Get reward/bonus reports showing incentives awarded, redemption rates, and impact on user engagement. Filterable by promotion type and user segment.
+            - /get_turnover_report: Get turnover/revenue reports showing total betting volume/activity, with breakdowns by product, date range and user level. Includes trend analysis and comparison features.
 
         Determine which function best matches the user's request and return it in JSON format like:
         {
