@@ -22,6 +22,7 @@ class ARBServiceImpl(ARBService):
         confirmation_agent: ConfirmationAgent,
         ner_agent: NerAgent,
         function_calling_agent: FunctionCallingAgent,
+        greeting_recognition_agent: ConfirmationAgent,
         database: ARBDBService
     ) -> None:
         """
@@ -42,7 +43,7 @@ class ARBServiceImpl(ARBService):
         self.ner_agent = ner_agent
         self.database = database
         self.function_calling_agent = function_calling_agent
-        
+        self.greeting_recognition_agent = greeting_recognition_agent
         
     @staticmethod
     def __update_entities(previous_params: Dict[str, str], current_params: Dict[str, str]) -> Dict[str, str]:
@@ -71,11 +72,7 @@ class ARBServiceImpl(ARBService):
                 updated_params[key] = previous_params[key]
         return updated_params
 
-    @staticmethod
-    def __is_different_from_default_entities(entities: Dict[str, str]) -> bool:
-        if entities['from_date'] != 'N/A' and entities['to_date'] != 'N/A' and entities['product'] != 'All' and entities['product_detail'] != 'All' and entities['level'] != 'All' and entities['user'] != 'N/A':     
-            return True
-        return False
+
 
     def chat(self, user_id: str, message: str) -> AlphaMetadata:
         """
@@ -99,6 +96,9 @@ class ARBServiceImpl(ARBService):
         
         # Get confirmation for the detected tasks and entities
         is_confirmed = self.confirmation_agent.get_decision(message)
+
+        # Get the greeting recognition
+        is_normal_conversation = self.greeting_recognition_agent.get_decision(message)
 
         # Get the function calling
         function_called = self.function_calling_agent.call_function(message)
@@ -135,11 +135,8 @@ class ARBServiceImpl(ARBService):
         function_name = FUNCTION_MAPPING_NAME[function_called]
         
         # Define the normal conversation
-        if not self.__is_different_from_default_entities(entities) or function_called is None:
-            is_normal_conversation = True
-            
-        # if self.__is_different_from_default_entities(entities) and function_called is None:
-        #     is_normal_conversation = False
+        if is_action:
+            is_normal_conversation = False
             
         print('🤖 is_normal_conversation: ', is_normal_conversation)
         
@@ -200,16 +197,17 @@ class ARBServiceImpl(ARBService):
 {message_non_date}"""
 
         # Add header based on function status
-        if function_called is None and not is_normal_conversation:
-            header = "🎲 Here is the summary of parameters:"
-            function_warning = """
-⚠️ NOTE THAT: You should not confirm the information if you have not specified the function to proceed with generating the report.
-❌ Could not find the Function/Report. Please specify the function to proceed with generating the report."""
-            response = f"{header}\n{response}\n{function_warning}"
-        
         if not is_normal_conversation:
-            header = f"🎲 Here is the summary of parameters for {function_name}:"
-            response = f"{header}\n{response}"
+            if function_called is None:
+                header = "🎲 Here is the summary of parameters:"
+                function_warning = """
+    ⚠️ NOTE THAT: You should not confirm the information if you have not specified the function to proceed with generating the report.
+    ❌ Could not find the Function/Report. Please specify the function to proceed with generating the report."""
+                response = f"{header}\n{response}\n{function_warning}"
+            
+            else:
+                header = f"🎲 Here is the summary of parameters for {function_name}:"
+                response = f"{header}\n{response}"
             
         print(f'🕵️ Request: {message}\n')
         print(f'🤖 Response: {response}\n') 

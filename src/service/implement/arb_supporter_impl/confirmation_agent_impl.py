@@ -27,7 +27,7 @@ class ConfirmationAgentImpl(ConfirmationAgent):
         - The response must be formatted as {{"is_confirmed": 1}} for confirmation or {{"is_confirmed": 0}} for rejection
         - Look for confirmation words/phrases always like:
           * Direct confirmation: "confirm", "yes", "correct", "right", "agreed", "accept", "approve"
-          * Casual confirmation: "ok", "okay", "sure", "alright", "fine", "yep", "yeah"
+          * Casual confirmation: "ok", "okay", "okela", "oke", "sure", "alright", "fine", "yep", "yeah"
           * Action confirmation: "let's do it", "go ahead", "proceed", "continue", "I'm ready", "do it"
           * Positive acknowledgement: "sounds good", "looks good", "that works", "perfect", "exactly"
         
@@ -44,6 +44,12 @@ class ConfirmationAgentImpl(ConfirmationAgent):
         - ***Assistant***: {{"is_confirmed": 0}}
 
         - ***User***: "Yes, that's correct."
+        - ***Assistant***: {{"is_confirmed": 1}}
+        
+        - ***User***: "Okela bot"
+        - ***Assistant***: {{"is_confirmed": 1}}
+        
+        - ***User***: "Oke"
         - ***Assistant***: {{"is_confirmed": 1}}
 
         - ***User***: "No, I meant for the last week."

@@ -12,6 +12,7 @@ from src.service.implement.arb_supporter_impl.llm_impl import LLMImpl
 
 from src.service.interface.arb_supporter.confirmation_agent import ConfirmationAgent
 from src.service.implement.arb_supporter_impl.confirmation_agent_impl import ConfirmationAgentImpl
+from src.service.implement.arb_supporter_impl.greeting_recognition_agent import GreetingRecognitionAgentImpl
 
 from src.service.interface.arb_service.arb_db_service import ARBDBService
 from src.service.implement.arb_service_impl.arb_db_service_impl import ARBDBServiceImpl
@@ -73,6 +74,14 @@ class ApplicationContainer(containers.DeclarativeContainer):
         )
     )
     
+    greeting_recognition_agent = providers.AbstractSingleton(ConfirmationAgent)
+    greeting_recognition_agent.override(
+        providers.Singleton(
+            GreetingRecognitionAgentImpl,
+            llm=llm
+        )
+    )
+    
     ner_agent = providers.AbstractSingleton(NerAgent)
     ner_agent.override(
         providers.Singleton(
@@ -97,6 +106,7 @@ class ApplicationContainer(containers.DeclarativeContainer):
             confirmation_agent=confirmation_agent,
             ner_agent=ner_agent,
             function_calling_agent=function_calling_agent,
+            greeting_recognition_agent=greeting_recognition_agent,
             database=arb_database
         )
     )
